@@ -1,6 +1,8 @@
 // vite.config.ts
-import { projectBaseWithSlash } from './myconfig.js';
 /// <reference types="vitest" />
+
+import { projectBaseWithSlash } from './myconfig.js';
+
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -15,27 +17,30 @@ type BackendUrlMode = keyof typeof backendUrls;
 export default defineConfig(({ mode }) => {
 	const safeMode = mode as BackendUrlMode;
 	const backendUrl = backendUrls[safeMode] || backendUrls.production;
+
 	const isProduction = mode === 'production';
+
+	const allowedHosts =
+		safeMode === 'development'
+		 ? ['*', 'localhost', '127.0.0.1']
+		 : ['mindruins.posetmage.com'];
+
 
 	return {
 		base: isProduction ? projectBaseWithSlash : '/',
 
 		plugins: [tailwindcss(), sveltekit()],
-
 		optimizeDeps: {
 			exclude: ['clsx', '@xyflow/system', 'classcat']
 		},
-
 		server: {
 			host: '0.0.0.0',
 			port: 3000,
-			allowedHosts: ['*']
+			allowedHosts
 		},
-
 		define: {
 			'import.meta.env.VITE_BACKEND_URL': JSON.stringify(backendUrl)
 		},
-
 		test: {
 			workspace: [
 				{

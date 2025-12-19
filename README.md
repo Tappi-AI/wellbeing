@@ -2,6 +2,20 @@
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
+## package as android
+
+
+```
+npm run cap
+```
+
+
+```\android\app\src\main\AndroidManifest.xml``` add 
+```
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+```
+
 ## Creating a project
 
 If you're seeing this, you've probably already done this step. Congrats!
