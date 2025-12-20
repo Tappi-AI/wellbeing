@@ -9,7 +9,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 const backendUrls = {
 	development: 'http://localhost:5000',
-	production: 'https://mindruins.posetmage.com'
+	production: 'https://wellbeing.posetmage.com'
 } as const;
 
 type BackendUrlMode = keyof typeof backendUrls;
@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
 	const allowedHosts =
 		safeMode === 'development'
 		 ? ['*', 'localhost', '127.0.0.1']
-		 : ['mindruins.posetmage.com'];
+		 : ['wellbeing.posetmage.com'];
 
 
 	return {

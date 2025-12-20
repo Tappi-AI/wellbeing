@@ -20,8 +20,8 @@
 		‹
 	</button>
 
-	<h2 class="m-0 text-lg font-semibold flex items-center gap-1">
-		<span class="inline-block text-right w-12">
+	<h2 class="m-0 flex items-center gap-1 text-lg font-semibold">
+		<span class="inline-block w-12 text-right">
 			{$calendarStore.currentDate.toFormat('MMM')}
 		</span>
 		<span class="inline-block w-14">
@@ -29,14 +29,13 @@
 		</span>
 	</h2>
 
-
 	<button
 		class="rounded px-2 py-1 hover:bg-gray-100"
 		on:click={() => setCurrentDate($calendarStore.currentDate.plus({ months: 1 }))}
 	>
 		›
 	</button>
-		<button
+	<button
 		class="ml-2 rounded bg-blue-300 px-3 py-1 text-white hover:bg-blue-400"
 		on:click={() => {
 			const today = DateTime.now();
@@ -49,7 +48,7 @@
 </div>
 
 <!-- ===================== WEEKDAY HEADER ===================== -->
-<div class="grid grid-cols-7 text-center font-semibold border-b border-gray-300 bg-gray-100">
+<div class="grid grid-cols-7 border-b border-gray-300 bg-gray-100 text-center font-semibold">
 	<div>Sun</div>
 	<div>Mon</div>
 	<div>Tue</div>
