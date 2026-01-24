@@ -89,20 +89,20 @@
 
 					<div class="rounded-lg border border-green-200 bg-green-50 p-4">
 						<h3 class="mb-2 font-semibold text-green-900">Access Token</h3>
-						<p class="break-all font-mono text-xs text-gray-700">{$authStore.accessToken}</p>
+						<p class="font-mono text-xs break-all text-gray-700">{$authStore.accessToken}</p>
 					</div>
 
 					{#if $authStore.refreshToken}
 						<div class="rounded-lg border border-purple-200 bg-purple-50 p-4">
 							<h3 class="mb-2 font-semibold text-purple-900">Refresh Token</h3>
-							<p class="break-all font-mono text-xs text-gray-700">{$authStore.refreshToken}</p>
+							<p class="font-mono text-xs break-all text-gray-700">{$authStore.refreshToken}</p>
 						</div>
 					{/if}
 
 					{#if $authStore.idToken}
 						<div class="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
 							<h3 class="mb-2 font-semibold text-yellow-900">ID Token</h3>
-							<p class="break-all font-mono text-xs text-gray-700">{$authStore.idToken}</p>
+							<p class="font-mono text-xs break-all text-gray-700">{$authStore.idToken}</p>
 						</div>
 					{/if}
 
@@ -120,11 +120,20 @@
 						<div class="space-y-1 text-sm">
 							<p><span class="font-medium">Backend URL:</span> {envConfig.backendUrl}</p>
 							<p><span class="font-medium">Google Client ID:</span> {envConfig.googleClientId}</p>
-							<p><span class="font-medium">Google Client Secret:</span> {envConfig.googleClientSecret}</p>
+							<p>
+								<span class="font-medium">Google Client Secret:</span>
+								{envConfig.googleClientSecret}
+							</p>
 							<p><span class="font-medium">Google Redirect:</span> {envConfig.googleRedirectUri}</p>
 							<p><span class="font-medium">Authentik URL:</span> {envConfig.authentikUrl}</p>
-							<p><span class="font-medium">Authentik Client ID:</span> {envConfig.authentikClientId}</p>
-							<p><span class="font-medium">Authentik Redirect:</span> {envConfig.authentikRedirectUri}</p>
+							<p>
+								<span class="font-medium">Authentik Client ID:</span>
+								{envConfig.authentikClientId}
+							</p>
+							<p>
+								<span class="font-medium">Authentik Redirect:</span>
+								{envConfig.authentikRedirectUri}
+							</p>
 						</div>
 					</div>
 				</div>
@@ -144,11 +153,20 @@
 						<div class="space-y-1 text-sm">
 							<p><span class="font-medium">Backend URL:</span> {envConfig.backendUrl}</p>
 							<p><span class="font-medium">Google Client ID:</span> {envConfig.googleClientId}</p>
-							<p><span class="font-medium">Google Client Secret:</span> {envConfig.googleClientSecret}</p>
+							<p>
+								<span class="font-medium">Google Client Secret:</span>
+								{envConfig.googleClientSecret}
+							</p>
 							<p><span class="font-medium">Google Redirect:</span> {envConfig.googleRedirectUri}</p>
 							<p><span class="font-medium">Authentik URL:</span> {envConfig.authentikUrl}</p>
-							<p><span class="font-medium">Authentik Client ID:</span> {envConfig.authentikClientId}</p>
-							<p><span class="font-medium">Authentik Redirect:</span> {envConfig.authentikRedirectUri}</p>
+							<p>
+								<span class="font-medium">Authentik Client ID:</span>
+								{envConfig.authentikClientId}
+							</p>
+							<p>
+								<span class="font-medium">Authentik Redirect:</span>
+								{envConfig.authentikRedirectUri}
+							</p>
 						</div>
 					</div>
 
