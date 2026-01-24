@@ -2,18 +2,21 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth.store';
-	import { Capacitor } from '@capacitor/core';
 
+	const isMobile = import.meta.env.VITE_PLATFORM === 'mobile';
 	let SpeechRecognition: any = null;
 
 	onMount(async () => {
 		if (!$authStore) {
 			goto('/login');
 		}
-		// Dynamic import for native platforms only
-		if (Capacitor.isNativePlatform()) {
-			const mod = await import('@capacitor-community/speech-recognition');
-			SpeechRecognition = mod.SpeechRecognition;
+		// Dynamic import for mobile platforms only
+		if (isMobile) {
+			const { Capacitor } = await import('@capacitor/core');
+			if (Capacitor.isNativePlatform()) {
+				const mod = await import('@capacitor-community/speech-recognition');
+				SpeechRecognition = mod.SpeechRecognition;
+			}
 		}
 	});
 
@@ -43,7 +46,6 @@
 	let currentEntry = $state<Entry | null>(null);
 
 	let webRecognition: any = null;
-	const isNative = Capacitor.isNativePlatform();
 
 	$effect(() => {
 		const timer = setInterval(() => (currentTime = new Date()), 1000);
@@ -155,7 +157,7 @@
 
 	async function toggleRecording() {
 		if (isRecording) {
-			if (isNative) {
+			if (isMobile) {
 				await stopNativeRecording();
 			} else {
 				webRecognition?.stop();
@@ -167,7 +169,7 @@
 		activity = '';
 		isRecording = true;
 
-		if (isNative) {
+		if (isMobile) {
 			await startNativeRecording();
 		} else {
 			await startWebRecording();
