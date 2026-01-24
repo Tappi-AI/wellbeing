@@ -39,6 +39,14 @@ export default defineConfig(({ mode }) => {
 		optimizeDeps: {
 			exclude: ['clsx', '@xyflow/system', 'classcat']
 		},
+		build: {
+			rollupOptions: {
+				external: [
+					'@capacitor/core',
+					'@capacitor-community/speech-recognition'
+				]
+			}
+		},
 		server: {
 			host: '0.0.0.0',
 			port: 3000,

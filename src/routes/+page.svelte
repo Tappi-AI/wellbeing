@@ -3,11 +3,17 @@
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth.store';
 	import { Capacitor } from '@capacitor/core';
-	import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 
-	onMount(() => {
+	let SpeechRecognition: any = null;
+
+	onMount(async () => {
 		if (!$authStore) {
 			goto('/login');
+		}
+		// Dynamic import for native platforms only
+		if (Capacitor.isNativePlatform()) {
+			const mod = await import('@capacitor-community/speech-recognition');
+			SpeechRecognition = mod.SpeechRecognition;
 		}
 	});
 
