@@ -2,42 +2,72 @@
 
 import { providers } from './providers';
 import { generateRandomString, generateCodeChallenge } from './pkce';
-import { exchangeCodeForToken, fetchUserInfo } from './oauth';
 import type { AuthProvider, LoginInfo } from '$lib/types/auth';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-interface BackendUserInfo {
-	sub: string | null;
+interface TokenResponse {
+	access_token: string;
+	refresh_token?: string;
+	id_token?: string;
+	expires_in?: number;
+	userinfo: {
+		sub: string;
+		email: string;
+		name?: string;
+		picture?: string;
+	};
+}
+
+interface MeResponse {
+	sub?: string;
 	email: string;
-	username: string | null;
-	picture: string | null;
+	name?: string;
+	picture?: string;
 	provider: 'google' | 'authentik';
 	role?: string;
 }
 
 /**
- * Verify user with backend. Returns role only if 'user', otherwise empty.
+ * Exchange auth code for tokens via backend.
  */
-export async function verifyWithBackend(accessToken: string): Promise<BackendUserInfo | null> {
+async function exchangeCodeViaBackend(
+	provider: AuthProvider,
+	code: string,
+	redirectUri: string,
+	codeVerifier: string
+): Promise<TokenResponse> {
+	const response = await fetch(`${BACKEND_URL}/api/login/${provider}/token`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			code,
+			redirect_uri: redirectUri,
+			code_verifier: codeVerifier
+		})
+	});
+
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({ detail: 'Token exchange failed' }));
+		throw new Error(error.detail || 'Token exchange failed');
+	}
+
+	return response.json();
+}
+
+/**
+ * Get user info and role from backend /me endpoint.
+ */
+async function fetchMe(accessToken: string): Promise<MeResponse | null> {
 	const response = await fetch(`${BACKEND_URL}/api/login/me`, {
-		headers: {
-			Authorization: `Bearer ${accessToken}`
-		}
+		headers: { Authorization: `Bearer ${accessToken}` }
 	});
 
 	if (!response.ok) {
 		return null;
 	}
 
-	const data: BackendUserInfo = await response.json();
-
-	// Only 'user' role can use the app
-	if (data.role !== 'user') {
-		data.role = undefined;
-	}
-
-	return data;
+	return response.json();
 }
 
 export async function startLogin(providerName: AuthProvider) {
@@ -66,11 +96,7 @@ export async function startLogin(providerName: AuthProvider) {
 		params.set('prompt', 'consent');
 	}
 
-	console.log(`[OAuth] Starting ${providerName} login`, {
-		clientId: provider.clientId ? '✓' : '✗ MISSING',
-		redirectUri: provider.redirectUri
-	});
-
+	console.log(`[OAuth] Starting ${providerName} login`);
 	window.location.href = `${provider.authorizeUrl}?${params.toString()}`;
 }
 
@@ -88,29 +114,16 @@ export async function handleOAuthCallback(
 		throw new Error('Invalid OAuth state');
 	}
 
-	// Build token exchange params
-	const tokenParams: Record<string, string> = {
-		grant_type: 'authorization_code',
+	// Exchange code via backend (backend has secrets)
+	const tokens = await exchangeCodeViaBackend(
+		providerName,
 		code,
-		redirect_uri: provider.redirectUri,
-		client_id: provider.clientId,
-		code_verifier: verifier
-	};
+		provider.redirectUri,
+		verifier
+	);
 
-	// Google requires client_secret (not a public client)
-	if (providerName === 'google') {
-		const clientSecret = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
-		if (clientSecret) {
-			tokenParams.client_secret = clientSecret;
-		}
-	}
-
-	const tokens = await exchangeCodeForToken(provider.tokenUrl, tokenParams);
-
-	const userInfo = await fetchUserInfo(provider.userInfoUrl, tokens.access_token);
-
-	// Verify user with backend - role will be empty if not 'user'
-	const backendUser = await verifyWithBackend(tokens.access_token);
+	// Get user info and role from backend
+	const me = await fetchMe(tokens.access_token);
 
 	return {
 		provider: providerName,
@@ -118,7 +131,12 @@ export async function handleOAuthCallback(
 		refreshToken: tokens.refresh_token,
 		idToken: tokens.id_token,
 		expiresAt: tokens.expires_in ? Math.floor(Date.now() / 1000) + tokens.expires_in : undefined,
-		userInfo,
-		role: backendUser?.role
+		userInfo: {
+			sub: tokens.userinfo.sub,
+			email: tokens.userinfo.email,
+			name: tokens.userinfo.name,
+			picture: tokens.userinfo.picture
+		},
+		role: me?.role
 	};
 }
