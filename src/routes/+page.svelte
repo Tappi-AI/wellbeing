@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth.store';
+	import { settingsStore } from '$lib/stores/settings.store';
 	import { loadJson, saveJson } from '$lib/backend/storage';
 
 	const isMobile = import.meta.env.VITE_PLATFORM === 'mobile';
@@ -122,7 +123,7 @@
 			});
 
 			await SpeechRecognition.start({
-				language: 'en-US',
+				language: $settingsStore.speechLang,
 				partialResults: true,
 				popup: false
 			});
@@ -152,7 +153,7 @@
 				return;
 			}
 			webRecognition = new SR();
-			webRecognition.lang = 'en-US';
+			webRecognition.lang = $settingsStore.speechLang;
 			webRecognition.continuous = true;
 			webRecognition.interimResults = true;
 			webRecognition.onresult = (e: any) => {

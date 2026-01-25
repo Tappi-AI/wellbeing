@@ -25,11 +25,11 @@
 <!-- Floating Menu Button -->
 <button
 	onclick={() => (menuOpen = !menuOpen)}
-	class="fixed top-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+	class="fixed top-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm shadow-lg transition-all hover:scale-105 hover:bg-white/30"
 	aria-label="Toggle menu"
 >
 	{#if menuOpen}
-		<svg class="h-6 w-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -38,7 +38,7 @@
 			/>
 		</svg>
 	{:else}
-		<svg class="h-6 w-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -59,12 +59,12 @@
 	></button>
 
 	<!-- Menu Panel -->
-	<div class="fixed top-0 right-0 z-50 h-full w-64 bg-white shadow-2xl">
+	<div class="fixed top-0 right-0 z-50 h-full w-64 bg-gradient-to-b from-violet-600 via-purple-600 to-fuchsia-600 shadow-2xl">
 		<div class="flex h-full flex-col pt-20">
 			<nav class="flex-1 space-y-1 px-4">
 				<button
 					onclick={() => navigate('/')}
-					class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-gray-700 transition hover:bg-gray-100"
+					class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-white/90 transition hover:bg-white/20"
 				>
 					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -78,8 +78,29 @@
 				</button>
 
 				<button
+					onclick={() => navigate('/config')}
+					class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-white/90 transition hover:bg-white/20"
+				>
+					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+						/>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+						/>
+					</svg>
+					Settings
+				</button>
+
+				<button
 					onclick={() => navigate('/debug')}
-					class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-gray-700 transition hover:bg-gray-100"
+					class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-white/90 transition hover:bg-white/20"
 				>
 					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -95,7 +116,7 @@
 				{#if $authStore?.role}
 					<button
 						onclick={() => navigate('/chat')}
-						class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-gray-700 transition hover:bg-gray-100"
+						class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-white/90 transition hover:bg-white/20"
 					>
 						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -110,7 +131,7 @@
 
 					<button
 						onclick={() => navigate('/calendar')}
-						class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-gray-700 transition hover:bg-gray-100"
+						class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-white/90 transition hover:bg-white/20"
 					>
 						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -126,7 +147,7 @@
 			</nav>
 
 			<!-- Bottom Section -->
-			<div class="border-t border-gray-200 p-4">
+			<div class="border-t border-white/20 p-4">
 				{#if $authStore?.role}
 					{#if $authStore.userInfo}
 						<div class="mb-3 flex items-center gap-3 px-2">
@@ -134,7 +155,7 @@
 								<img src={$authStore.userInfo.picture} alt="Profile" class="h-8 w-8 rounded-full" />
 							{:else}
 								<div
-									class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-purple-600"
+									class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white"
 								>
 									{($authStore.userInfo.name || $authStore.userInfo.email || '?')
 										.charAt(0)
@@ -142,13 +163,13 @@
 								</div>
 							{/if}
 							<div class="min-w-0 flex-1">
-								<p class="truncate text-sm font-medium text-gray-900">
+								<p class="truncate text-sm font-medium text-white">
 									{$authStore.userInfo.name || $authStore.userInfo.email || 'User'}
 								</p>
-								<p class="truncate text-xs text-gray-500">
+								<p class="truncate text-xs text-white/70">
 									{$authStore.provider}
 									<span
-										class={`ml-1 rounded px-1 text-xs ${$authStore.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}
+										class={`ml-1 rounded px-1 text-xs ${$authStore.role === 'admin' ? 'bg-red-400/30 text-red-100' : 'bg-green-400/30 text-green-100'}`}
 									>
 										{$authStore.role}
 									</span>
@@ -158,7 +179,7 @@
 					{/if}
 					<button
 						onclick={handleLogout}
-						class="flex w-full items-center gap-3 rounded-lg bg-red-50 px-4 py-3 text-red-700 transition hover:bg-red-100"
+						class="flex w-full items-center gap-3 rounded-xl bg-white/10 px-4 py-3 text-white transition hover:bg-white/20"
 					>
 						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -173,7 +194,7 @@
 				{:else}
 					<button
 						onclick={() => navigate('/login')}
-						class="flex w-full items-center gap-3 rounded-lg bg-purple-600 px-4 py-3 text-white transition hover:bg-purple-700"
+						class="flex w-full items-center gap-3 rounded-xl bg-white px-4 py-3 text-purple-600 font-semibold transition hover:bg-white/90"
 					>
 						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path

@@ -32,7 +32,7 @@
 	}
 
 	function goToKeyPage() {
-		goto(resolve('/key'));
+		goto(resolve('/config'));
 	}
 </script>
 
